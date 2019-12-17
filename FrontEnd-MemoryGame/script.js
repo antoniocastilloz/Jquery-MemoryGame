@@ -113,14 +113,11 @@ function jogo() {
         $(this).find($("img[name='frente']")).addClass("virarNegativo")
         $(this).find($("img[name='verso']")).addClass("hide")
 
-        var idUltimaCartaVirada = $(this).attr('id')
-
-        idCartas.push(idUltimaCartaVirada)
+        idCartas.push($(this).attr('id'))
 
         compararCartas()
         verificarVitoria()
     });
-
 }
 
 function compararCartas() {
@@ -150,31 +147,42 @@ function compararCartas() {
 
 function verificarVitoria() {
     if (pontosJogo == 8) {
-
         var tempoFinal = pegarTempoAtual();
         var recordVitoria = []
 
-        if (Math.sign(tempoFinal[1] - tempoInicial[1]) == -1) {
-            recordVitoria.push((tempoFinal[0] - tempoInicial[0]) - 1)
-            recordVitoria.push(Math.abs((tempoFinal[1] + 60) - tempoInicial[1]))
-        } else {
-            recordVitoria.push(tempoFinal[0] - tempoInicial[0])
-            recordVitoria.push(tempoFinal[1] - tempoInicial[1])
-        }
+        converterCalcularDiferencaTempo(tempoFinal, recordVitoria)
 
         var recordVitoriaString = recordVitoria[0] + ":" + recordVitoria[1]
-        if (localStorage.getItem("recordMinuto") && localStorage.getItem("recordSegundo") === null) {
-            localStorage.setItem("recordMinuto", recordVitoria[0].toString())
-            localStorage.setItem("recordSegundo", recordVitoria[1].toString())
-        } else if (localStorage.getItem('recordMinuto') >= recordVitoria[0] && localStorage.getItem('recordSegundo') >= recordVitoria[1]) {
-            localStorage.setItem("recordMinuto", recordVitoria[0].toString())
-            localStorage.setItem("recordSegundo", recordVitoria[1].toString())
-        }
 
-        setTimeout(function () {
-            alert("Parabéns você ganhou!\nTempo: " + recordVitoriaString)
-        }, 500)
+        salvarRecordLocalmente(recordVitoria)
+
+        exibirAlertVitoria(recordVitoriaString)
         pontosJogo = 0
     }
 }
 
+function exibirAlertVitoria(recordVitoriaString) {
+    setTimeout(function () {
+        alert("Parabéns você ganhou!\nTempo: " + recordVitoriaString)
+    }, 500)
+}
+
+function converterCalcularDiferencaTempo(tempoFinal, recordVitoria) {
+    if (Math.sign(tempoFinal[1] - tempoInicial[1]) == -1) {
+        recordVitoria.push((tempoFinal[0] - tempoInicial[0]) - 1)
+        recordVitoria.push(Math.abs((tempoFinal[1] + 60) - tempoInicial[1]))
+    } else {
+        recordVitoria.push(tempoFinal[0] - tempoInicial[0])
+        recordVitoria.push(tempoFinal[1] - tempoInicial[1])
+    }
+}
+
+function salvarRecordLocalmente(recordVitoria) {
+    if (localStorage.getItem("recordMinuto") && localStorage.getItem("recordSegundo") === null) {
+        localStorage.setItem("recordMinuto", recordVitoria[0].toString())
+        localStorage.setItem("recordSegundo", recordVitoria[1].toString())
+    } else if (localStorage.getItem('recordMinuto') >= recordVitoria[0] && localStorage.getItem('recordSegundo') >= recordVitoria[1]) {
+        localStorage.setItem("recordMinuto", recordVitoria[0].toString())
+        localStorage.setItem("recordSegundo", recordVitoria[1].toString())
+    }
+}
