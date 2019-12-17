@@ -10,38 +10,31 @@ var numeroClicksBotaoIniciarReiniciar = 0
 embaralharImagens(imagensDuplicadas);
 renderizarCartas()
 
-function embaralharImagens(imagens) {
-    imagens.sort(() => Math.random() - 0.5)
-}
-
 $("#botaoIniciarReiniciarJogo").click(function () {
     numeroClicksBotaoIniciarReiniciar++
     tempoInicial = pegarTempoAtual();
     idCartas = []
 
     if (numeroClicksBotaoIniciarReiniciar >= 2) {
-        
         desvirarCartas()
-        reiniciarVisualizacaoCartas()
-        $('#botaoIniciarReiniciarJogo').addClass('disabled');
-        alteraNomeBotaoIniciarReiniciarJogo();
-        embaralharImagens(imagensDuplicadas);
-        alterarImagemCarta()
-        virarTodasCartas()
-    } else {
-        reiniciarVisualizacaoCartas()
-        $('#botaoIniciarReiniciarJogo').addClass('disabled');
-        alteraNomeBotaoIniciarReiniciarJogo();
-        embaralharImagens(imagensDuplicadas);
-        alterarImagemCarta()
-        virarTodasCartas()
+    }
+    reiniciarVisualizacaoCartas()
+    $('#botaoIniciarReiniciarJogo').addClass('disabled');
+    alteraNomeBotaoIniciarReiniciarJogo();
+    embaralharImagens(imagensDuplicadas);
+    alterarImagemCarta()
+    virarTodasCartas()
+    if (numeroClicksBotaoIniciarReiniciar < 2) {
         jogo()
-
     }
 });
 
-function desvirarCartas(){
-    if($("div[name='carta']").hasClass("virarPositivo")){
+function embaralharImagens(imagens) {
+    imagens.sort(() => Math.random() - 0.5)
+}
+
+function desvirarCartas() {
+    if ($("div[name='carta']").hasClass("virarPositivo")) {
         $("div[name='carta']").removeClass("virarPositivo")
         $("img[name='frente']").removeClass("virarNegativo").addClass("hide")
         $("img[name='verso']").removeClass("hide")
@@ -152,15 +145,15 @@ function jogo() {
 
             var tempoFinal = pegarTempoAtual();
             var recordVitoria = []
-            
+
             if (Math.sign(tempoFinal[1] - tempoInicial[1]) == -1) {
-                console.log(tempoFinal[0]+":"+tempoFinal[1])
-                console.log(tempoInicial[0]+":"+tempoInicial[1])
+                console.log(tempoFinal[0] + ":" + tempoFinal[1])
+                console.log(tempoInicial[0] + ":" + tempoInicial[1])
                 recordVitoria.push((tempoFinal[0] - tempoInicial[0]) - 1)
-                recordVitoria.push(Math.abs((tempoFinal[1]+60) - tempoInicial[1]))
+                recordVitoria.push(Math.abs((tempoFinal[1] + 60) - tempoInicial[1]))
             } else {
-                console.log(tempoFinal[0]+":"+tempoFinal[1])
-                console.log(tempoInicial[0]+":"+tempoInicial[1])
+                console.log(tempoFinal[0] + ":" + tempoFinal[1])
+                console.log(tempoInicial[0] + ":" + tempoInicial[1])
                 recordVitoria.push(tempoFinal[0] - tempoInicial[0])
                 recordVitoria.push(tempoFinal[1] - tempoInicial[1])
             }
@@ -168,16 +161,16 @@ function jogo() {
             var recordVitoriaString = recordVitoria[0] + ":" + recordVitoria[1]
             // console.log(localStorage.getItem("recordMinuto"))
             // console.log(localStorage.getItem("recordSegundo"))
-            if(localStorage.getItem("recordMinuto") && localStorage.getItem("recordSegundo") === null){
+            if (localStorage.getItem("recordMinuto") && localStorage.getItem("recordSegundo") === null) {
                 console.log("teste1")
                 localStorage.setItem("recordMinuto", recordVitoria[0].toString())
                 localStorage.setItem("recordSegundo", recordVitoria[1].toString())
-            }else if(localStorage.getItem('recordMinuto') >= recordVitoria[0] && localStorage.getItem('recordSegundo') >= recordVitoria[1]){
+            } else if (localStorage.getItem('recordMinuto') >= recordVitoria[0] && localStorage.getItem('recordSegundo') >= recordVitoria[1]) {
                 console.log("teste2")
                 localStorage.setItem("recordMinuto", recordVitoria[0].toString())
                 localStorage.setItem("recordSegundo", recordVitoria[1].toString())
             }
-            
+
             setTimeout(function () {
                 alert("Parabéns você ganhou!\nTempo: " + recordVitoriaString)
             }, 500)
