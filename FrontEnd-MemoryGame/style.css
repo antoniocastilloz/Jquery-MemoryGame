@@ -1,0 +1,76 @@
+body{
+    background-color: #c6d4df;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.click-off{
+    pointer-events: none;
+}
+
+div.container div.row{
+    margin-bottom: 11.25px;
+}
+
+div#tabuleiro.row{
+    margin-bottom: 0px;
+}
+
+#tabuleiro{
+    perspective: 1000px;
+}
+
+#tabuleiro div.col.s3{
+    transform-style: preserve-3d;
+    transition: transform .5s;
+}
+
+img.responsive-img.valign-wrapper.z-depth-2{
+    background-color: white;
+}
+
+.text-bold{
+    font-weight: bold;
+}
+
+#melhorTempoJogo{
+    margin:0px;
+    line-height: 36px;
+}
+
+.hide{
+    display:none;
+}
+
+#tabuleiro.row .col {
+    padding: .75rem!important;
+}
+
+#container-botao{
+    padding-right: 11.25px;
+    padding-left: 11.25px;
+}
+
+.responsive-img.valign-wrapper.z-depth-2{
+    border-radius: 12px;
+}
+
+img.responsive-img, video.responsive-video {
+    padding: 12px;
+}
+
+@media(min-width: 993px){
+    .container{
+        width:40%!important;
+    }
+}
+
+.virarPositivo{
+    transform: rotateY(180deg);
+}
+
+.virarNegativo{
+    transform: rotateY(-180deg);
+}
+
