@@ -107,7 +107,6 @@ function reiniciarVisualizacaoCartas() {
 }
 
 function jogo() {
-
     $("div[name='carta']").click(function () {
         $(this).addClass("virarPositivo")
         $(this).find($("img[name='frente']")).removeClass("hide")
@@ -118,64 +117,64 @@ function jogo() {
 
         idCartas.push(idUltimaCartaVirada)
 
-        if (idCartas.length == 2) {
-            if (idCartas[0] != idCartas[1]) {
-                if ($("#" + idCartas[0]).find($("img[name='frente']")).attr('src') == $("#" + idCartas[1]).find($("img[name='frente']")).attr('src')) {
-                    idCartas = []
-                    pontosJogo++
-                } else {
-                    $("div[name='carta']").addClass("click-off")
-                    setTimeout(function () {
-                        $("#" + idCartas[0] + "," + "#" + idCartas[1]).removeClass("virarPositivo")
-                        $("#" + idCartas[0] + "," + "#" + idCartas[1]).find($("img[name='frente']")).removeClass("virarNegativo")
-                        $("#" + idCartas[0] + "," + "#" + idCartas[1]).find($("img[name='frente']")).addClass("hide")
-                        $("#" + idCartas[0] + "," + "#" + idCartas[1]).find($("img[name='verso']")).removeClass("hide")
-                        $("div[name='carta']").removeClass("click-off")
-                        idCartas = []
-                    }, 1500)
-                }
-            } else {
-                idCartas.pop();
-            }
-        } else if (idCartas.length == 3) {
-            idCartas.pop();
-        }
-
-        if (pontosJogo == 8) {
-
-            var tempoFinal = pegarTempoAtual();
-            var recordVitoria = []
-
-            if (Math.sign(tempoFinal[1] - tempoInicial[1]) == -1) {
-                console.log(tempoFinal[0] + ":" + tempoFinal[1])
-                console.log(tempoInicial[0] + ":" + tempoInicial[1])
-                recordVitoria.push((tempoFinal[0] - tempoInicial[0]) - 1)
-                recordVitoria.push(Math.abs((tempoFinal[1] + 60) - tempoInicial[1]))
-            } else {
-                console.log(tempoFinal[0] + ":" + tempoFinal[1])
-                console.log(tempoInicial[0] + ":" + tempoInicial[1])
-                recordVitoria.push(tempoFinal[0] - tempoInicial[0])
-                recordVitoria.push(tempoFinal[1] - tempoInicial[1])
-            }
-
-            var recordVitoriaString = recordVitoria[0] + ":" + recordVitoria[1]
-            // console.log(localStorage.getItem("recordMinuto"))
-            // console.log(localStorage.getItem("recordSegundo"))
-            if (localStorage.getItem("recordMinuto") && localStorage.getItem("recordSegundo") === null) {
-                console.log("teste1")
-                localStorage.setItem("recordMinuto", recordVitoria[0].toString())
-                localStorage.setItem("recordSegundo", recordVitoria[1].toString())
-            } else if (localStorage.getItem('recordMinuto') >= recordVitoria[0] && localStorage.getItem('recordSegundo') >= recordVitoria[1]) {
-                console.log("teste2")
-                localStorage.setItem("recordMinuto", recordVitoria[0].toString())
-                localStorage.setItem("recordSegundo", recordVitoria[1].toString())
-            }
-
-            setTimeout(function () {
-                alert("Parabéns você ganhou!\nTempo: " + recordVitoriaString)
-            }, 500)
-            pontosJogo = 0
-        }
+        compararCartas()
+        verificarVitoria()
     });
 
 }
+
+function compararCartas() {
+    if (idCartas.length == 2) {
+        if (idCartas[0] != idCartas[1]) {
+            if ($("#" + idCartas[0]).find($("img[name='frente']")).attr('src') == $("#" + idCartas[1]).find($("img[name='frente']")).attr('src')) {
+                idCartas = []
+                pontosJogo++
+            } else {
+                $("div[name='carta']").addClass("click-off")
+                setTimeout(function () {
+                    $("#" + idCartas[0] + "," + "#" + idCartas[1]).removeClass("virarPositivo")
+                    $("#" + idCartas[0] + "," + "#" + idCartas[1]).find($("img[name='frente']")).removeClass("virarNegativo")
+                    $("#" + idCartas[0] + "," + "#" + idCartas[1]).find($("img[name='frente']")).addClass("hide")
+                    $("#" + idCartas[0] + "," + "#" + idCartas[1]).find($("img[name='verso']")).removeClass("hide")
+                    $("div[name='carta']").removeClass("click-off")
+                    idCartas = []
+                }, 1500)
+            }
+        } else {
+            idCartas.pop();
+        }
+    } else if (idCartas.length == 3) {
+        idCartas.pop();
+    }
+}
+
+function verificarVitoria() {
+    if (pontosJogo == 8) {
+
+        var tempoFinal = pegarTempoAtual();
+        var recordVitoria = []
+
+        if (Math.sign(tempoFinal[1] - tempoInicial[1]) == -1) {
+            recordVitoria.push((tempoFinal[0] - tempoInicial[0]) - 1)
+            recordVitoria.push(Math.abs((tempoFinal[1] + 60) - tempoInicial[1]))
+        } else {
+            recordVitoria.push(tempoFinal[0] - tempoInicial[0])
+            recordVitoria.push(tempoFinal[1] - tempoInicial[1])
+        }
+
+        var recordVitoriaString = recordVitoria[0] + ":" + recordVitoria[1]
+        if (localStorage.getItem("recordMinuto") && localStorage.getItem("recordSegundo") === null) {
+            localStorage.setItem("recordMinuto", recordVitoria[0].toString())
+            localStorage.setItem("recordSegundo", recordVitoria[1].toString())
+        } else if (localStorage.getItem('recordMinuto') >= recordVitoria[0] && localStorage.getItem('recordSegundo') >= recordVitoria[1]) {
+            localStorage.setItem("recordMinuto", recordVitoria[0].toString())
+            localStorage.setItem("recordSegundo", recordVitoria[1].toString())
+        }
+
+        setTimeout(function () {
+            alert("Parabéns você ganhou!\nTempo: " + recordVitoriaString)
+        }, 500)
+        pontosJogo = 0
+    }
+}
+
